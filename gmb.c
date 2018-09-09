@@ -8,6 +8,7 @@ typedef struct node
 } t_hashTableNode;
 
 t_hashTableNode *hashMapChained[1];
+t_hashTableNode *tail = NULL;
 int counterH = 0;
 
 int hash(int value, int mod);
@@ -51,18 +52,16 @@ void chainedHashInsert(int value, int mod)
     int probe = hash(value, mod);
     if (hashMapChained[probe] == NULL)
     {
-        hashMapChained[probe] = malloc(sizeof(t_hashTableNode)); // then creates a new list
+        hashMapChained[probe] = malloc(sizeof(t_hashTableNode));
         hashMapChained[probe]->value = value;
         hashMapChained[probe]->next = NULL;
+
+        tail = hashMapChained[probe];
     }
     else
     {
-        t_hashTableNode *hashTableNode = hashMapChained[probe];
-        while (hashTableNode->next != NULL)
-        {
-            hashTableNode = hashTableNode->next;
-        }
-        hashTableNode->next = malloc(sizeof(t_hashTableNode)); // inserst the value as the last element of the list
+        t_hashTableNode *hashTableNode = tail;
+        hashTableNode->next = malloc(sizeof(t_hashTableNode));
         hashTableNode->next->value = value;
         hashTableNode->next->next = NULL;
     }
@@ -76,7 +75,7 @@ void printList(int hashMapRow)
 
     if (hashMapNode == NULL)
     {
-        printf("%d -> \\ \n", counterH);
+        printf("%d -> \\\n", counterH);
         return;
     }
     else
